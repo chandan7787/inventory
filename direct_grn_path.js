@@ -1,0 +1,85 @@
+import action from "../../support/action";
+import { faker } from '@faker-js/faker';
+
+const DIRINVOICE =
+  faker.number.int({ min: 10000, max: 99999 }) +
+  faker.string.alpha({ length: 5, casing: 'upper' });
+
+const direct_grn=
+{
+    direct_grn_flow: function()
+    {
+        cy.xpath(action.direct_grn).click()
+        cy.wait(2000)
+        cy.xpath(action.new_e_grn).click()
+      cy.wait(2000)
+      cy.xpath(action.EMR_INVOICE).type(DIRINVOICE)
+      cy.wait(2000)
+      cy.xpath(action.EMR_DC).type(DIRINVOICE)
+      cy.wait(2000)
+      cy.xpath(action.e_vendore).type("chandan")
+      cy.wait(5000)
+      cy.xpath(action.v_name).click()
+      cy.wait(4000)
+      cy.xpath(action.store).click()
+      cy.wait(2000)
+      cy.xpath(action.e_store_name).click()
+      cy.wait(2000)
+      cy.xpath(action.M_O_T).click()
+      cy.wait(2000)
+      cy.xpath(action.e_by_person).click()
+      cy.wait(2000)
+      cy.xpath(action.E_SAVE).click()
+      cy.wait(2000)
+      cy.xpath(action.E_ADD_ITEM).click()
+      cy.wait(2000)
+      cy.xpath(action.E_TYPE).type("KA11")
+      cy.wait(2000)
+      cy.xpath(action.E_SEARCH).click()
+      cy.wait(2000)
+      cy.xpath(action.E_CHECK_BOX).click()
+      cy.wait(2000)
+      cy.xpath(action.d_ADDITEM).click()
+      cy.wait(2000)
+      cy.xpath(action.E_BATCH1).type("batch-1")
+      cy.wait(2000)
+      cy.xpath(action.E_BATCH2).type("batch-1")
+      cy.wait(2000)
+      cy.xpath(action.E_RECIVE_QTY1).type("100")
+      cy.wait(2000)
+      cy.xpath(action.E_RECIVE_QTY2).type("100")
+      cy.wait(2000)
+      cy.xpath(action.E_RECIVE_QTY3).type("100")
+      cy.wait(2000)
+      cy.xpath(action.d_mrp).clear().type("5000")
+      cy.wait(2000)
+      cy.xpath(action.other_charge).click()
+      cy.wait(2000)
+      cy.xpath(action.add_oc).click()
+      cy.wait(2000)
+      cy.xpath(action.E_OC_DROP_DOWN).click()
+      cy.wait(2000)
+      cy.xpath(action.E_OTC).click()
+      cy.wait(2000)
+      cy.xpath(action.E_TYPE1).type("10.50")
+      cy.wait(2000)
+      cy.xpath(action.E_REMARK).type("ot chrge")
+      cy.wait(2000)
+      //cy.xpath(action.E_ITEM_DIS).click()
+     // cy.wait(2000)
+      //cy.xpath(action.E_YES).click()
+      //cy.wait(2000)
+      //cy.xpath(action.E_D_DROP_DOWN).click()
+      cy.wait(2000)
+      //cy.xpath(action.PER).click()
+     // cy.wait(2000)
+     // cy.xpath(action.E_DIS_TYPE).type("5")
+      cy.wait(2000)
+      cy.xpath(action.E_SAVE2).click()
+      cy.wait(2000)
+
+
+    }
+    
+}
+export default direct_grn;
