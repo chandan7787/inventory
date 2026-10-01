@@ -9,7 +9,7 @@ import module_search from "../../page/01.Procurement/07.module_search";
 
 
 
-describe("Login Test", () => {
+describe("Purchase Order Amendment Flow Test", () => {
 
     it("TEST_CASE_007 - Purchase_order_Amendment_PO_flow", () => 
     {

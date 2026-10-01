@@ -6,7 +6,7 @@ import Grn_approval_flow from "../../page/01.Procurement/13.grn_approval";
 
 
 
-describe("Login Test", () =>
+describe("Emergency GRN Flow Test", () =>
  {
   it("TEST_CASE_009 - emergency_grn_flow", () =>
      {

@@ -5,13 +5,12 @@ import po_verificatio_flow from "../../page/01.Procurement/08.po_verificatio";
 import purchase_order_approval from "../../page/01.Procurement/09.po_approval";
 
 
-describe("Login Test", () => {
+describe("Purchase Order Flow With PO Level Discount Test", () => {
 
-    it("TEST_CASE_005 - Purchase_order_flow With po level dis", () => 
+    it("TEST_CASE_005 - Purchase_order_flow With po level dis", () =>
     {
         login_page.LOgin();
         module_search.module();
-        //purchase_order_flow.purchase_order();
         purchase_order_flow.po_level_Discount();
         po_verificatio_flow.po_verificatio();
         purchase_order_approval.po_approval();

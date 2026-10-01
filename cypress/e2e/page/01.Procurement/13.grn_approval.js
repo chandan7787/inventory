@@ -6,9 +6,8 @@ const Grn_approval_flow = {
     cy.contains("a", "GRN Approval").click();
 
     cy.xpath(purchase_request.Search_filter).should("be.visible").click();
-    cy.wait(2000);
 
-    // Search using captured PO Number
+    // Search using captured GRN Number
     cy.get("@grnNumber").then((grnNumber) => {
       expect(grnNumber).to.not.be.empty;
 
@@ -22,18 +21,13 @@ const Grn_approval_flow = {
 
     // Search
     cy.contains("button", "Search").should("be.visible").click();
-    cy.wait(1000)
 
-    cy.xpath(grn_loc.first_line).click();
-    cy.wait(1000)
-    cy.get(grn_loc.Action_dropdown).click();
+    cy.xpath(grn_loc.first_line).should("be.visible").click();
+    cy.get(grn_loc.Action_dropdown).should("be.visible").click();
 
-    cy.contains("a","Approve GRN").click()
-    cy.get(grn_loc.remark).type('regular_grn_approval')
-    cy.contains("button","Approve GRN").click();
-    
-
-
+    cy.contains("a", "Approve GRN").click();
+    cy.get(grn_loc.remark).type('regular_grn_approval');
+    cy.contains("button", "Approve GRN").click();
   },
 };
 export default Grn_approval_flow;

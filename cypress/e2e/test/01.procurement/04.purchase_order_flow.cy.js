@@ -5,7 +5,7 @@ import po_verificatio_flow from "../../page/01.Procurement/08.po_verificatio";
 import purchase_order_approval from "../../page/01.Procurement/09.po_approval";
 
 
-describe("Login Test", () => {
+describe("Purchase Order Flow Test", () => {
 
     it("TEST_CASE_004 - Purchase_order_flow", () => 
     {

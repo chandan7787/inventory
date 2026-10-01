@@ -1,20 +1,15 @@
 import purchase_order_loc from "../../locators/03.purchase_order_loc";
 import purchase_request from "../../locators/02.Purchase_Request";
 
-
-
-
- const po_verificatio_flow=
- {
-    po_verificatio: function()
-    {
-        cy.contains("a","PO Verification").click()
+const po_verificatio_flow = {
+    po_verificatio: function () {
+        cy.contains("a", "PO Verification").click();
 
         // Open Search Filter
         cy.xpath(purchase_request.Search_filter)
             .should("be.visible")
             .click();
-             cy.wait(2000);
+        cy.wait(2000);
 
         // Search using captured PO Number
         cy.get("@PONumber").then((poNumber) => {
@@ -33,17 +28,19 @@ import purchase_request from "../../locators/02.Purchase_Request";
         cy.contains("button", "Search")
             .should("be.visible")
             .click();
-cy.wait(1500)
-            //-------------------------
-         cy.xpath(purchase_request.first_line).click()
-            cy.get(purchase_request.Action_dropdown).click();
-            
-            cy.contains("a","Verify PO").click();
-            cy.wait(1000)
-            cy.contains("button","Verify PO").click()
-            cy.wait(3000);
-  
 
+        cy.xpath(purchase_request.first_line)
+            .should("be.visible")
+            .click();
+
+        cy.get(purchase_request.Action_dropdown).click();
+
+        cy.contains("a", "Verify PO").click();
+
+        cy.contains("button", "Verify PO")
+            .should("be.visible")
+            .click();
+        cy.wait(3000);
     }
- }
- export default po_verificatio_flow;
+};
+export default po_verificatio_flow;
