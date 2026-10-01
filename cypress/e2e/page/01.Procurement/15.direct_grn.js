@@ -20,15 +20,12 @@ const DIRECT_GRN_ITEMS = [
 
 // Received qty / free qty / discount / cost price details per row.
 // Row text whitespace below matches each field's original selector exactly.
-// NOTE: the first entry's costPriceRow intentionally targets the "1 MG" row
-// text, not the "1 MG LESS" row it is grouped under here - that mismatch is
-// pre-existing in the original test and has been preserved as-is (see report).
 const RECEIVED_ROW_DETAILS = [
     {
         receivedRow: ' DOLO 650.1 MG LESS-KA11 ',
         freeQtyRow: 'DOLO 650.1 MG LESS-KA11',
         disRow: 'DOLO 650.1 MG LESS-KA11',
-        costPriceRow: ' DOLO 650.1 MG-KA11 '
+        costPriceRow: 'DOLO 650.1 MG LESS-KA11'
     },
     {
         receivedRow: ' DOLO 650.1 MG-KA11 ',

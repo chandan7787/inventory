@@ -14,9 +14,9 @@ const purchase_order_loc = {
 
   //DOLO 650.1 MG-KA11
   dolo_1mg_qty: '(//input[@type="number"])[1]',
-  dolo_11mg_freeqty: '(//input[@type="number"])[2]',
-  dolo_11mg_unitprice: '(//input[@type="number"])[3]',
-  dolo_11mg_dis: '(//input[@type="number"])[4]',
+  dolo_1mg_freeqty: '(//input[@type="number"])[2]',
+  dolo_1mg_unitprice: '(//input[@type="number"])[3]',
+  dolo_1mg_dis: '(//input[@type="number"])[4]',
 
   po_qty: 'input[type="number"][required]',
   po_freeqty: 'input[type="number"]',
