@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "@faker-js/faker": "^10.6.0",
+    "cypress": "^16.0.0",
+    "cypress-xpath": "^2.0.1"
+    
+  },
+  "scripts": {
+  "cy:all": "cypress run --e2e --browser chrome --headed"
+}
+}
