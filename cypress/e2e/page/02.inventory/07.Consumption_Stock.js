@@ -1,102 +1,64 @@
 import stock_movement_loc from "../../locators/08.stock_movement";
 
-const Consumption_Stock_Flow=
-{
-    Consumption_stock:function()
-    {
-        cy.contains("a", "Stock Movement").click()
-        cy.contains("a","Consumption Stock").click()
-        cy.contains("button","New ").click()
+// Items added to the consumption stock entry, in order.
+// Items 1 & 2 pick a batch from a dropdown; item 3 has no batch dropdown step.
+const CONSUMPTION_ITEMS = [
+    { name: 'DOLO 650.11 MG-KA11', batchDropdownIndex: 2 },
+    { name: 'DOLO 650.1 MG-KA11', batchDropdownIndex: 3 },
+    { name: 'DOLO 650.1 MG LESS-KA11', batchDropdownIndex: null }
+];
 
-        // Source Stock Area
-                cy.xpath(stock_movement_loc.From_StockArea).click();
-        
-                cy.get(stock_movement_loc.type_store)
-                    .type("Healthcare Store");
-        
-                cy.contains("li", "Healthcare store").click();
-        
-                // Transportation Type
-                cy.xpath(stock_movement_loc.Transportation_Type).click();
-                cy.contains("li", "BY PERSON").click();
+function openNewConsumptionStock() {
+    cy.contains("a", "Stock Movement").click();
+    cy.contains("a", "Consumption Stock").click();
+    cy.contains("button", "New ").click();
+}
 
-                // =========================
-        // Item 1
-        // =========================
-        cy.contains("button", "Add").click();
+function selectSourceStockArea() {
+    cy.xpath(stock_movement_loc.From_StockArea).click();
+    cy.get(stock_movement_loc.type_store).type("Healthcare Store");
+    cy.contains("li", "Healthcare store").click();
+}
 
-        cy.get(stock_movement_loc.type_itemname)
-            .eq(0)
-            .type("DOLO 650.11 MG-KA11");
+function selectTransportationType() {
+    cy.xpath(stock_movement_loc.Transportation_Type).click();
+    cy.contains("li", "BY PERSON").click();
+}
 
-        cy.contains("tr", "DOLO 650.11 MG-KA11").click();
+function addConsumptionItem({ name, batchDropdownIndex }, index) {
+    cy.contains("button", "Add").click();
 
-        cy.xpath(stock_movement_loc.consu_batchno)
-            .eq(2)
-            .click()
-        cy.contains("li","batch-1")    
+    cy.get(stock_movement_loc.type_itemname).eq(index).type(name);
+    cy.contains("tr", name).click();
 
-        cy.xpath(stock_movement_loc.batch_qty)
-            .eq(0)
-            .clear()
-            .type("5");
+    if (batchDropdownIndex !== null) {
+        cy.xpath(stock_movement_loc.consu_batchno).eq(batchDropdownIndex).click();
+        cy.contains("li", "batch-1");
+    }
 
-            // =========================
-        // Item 2
-        // =========================
-        cy.contains("button", "Add").click();
+    cy.xpath(stock_movement_loc.batch_qty).eq(index).clear().type("5");
+}
 
-        cy.get(stock_movement_loc.type_itemname)
-            .eq(1)
-            .type("DOLO 650.1 MG-KA11");
+function saveAndVerifySuccess() {
+    cy.xpath('//button[.="Save"]').should("be.visible").click();
 
-        cy.contains("tr", "DOLO 650.1 MG-KA11").click();
+    cy.get(".p-toast-message-success")
+        .should("be.visible")
+        .within(() => {
+            cy.get(".p-toast-summary").should("have.text", "Success Message");
+            cy.get(".p-toast-detail").should("have.text", "Item Added Successfully");
+        });
+}
 
-        cy.xpath(stock_movement_loc.consu_batchno)
-            .eq(3)
-            .click()
-            cy.contains("li","batch-1")
+const Consumption_Stock_Flow = {
+    Consumption_stock: function () {
+        openNewConsumptionStock();
+        selectSourceStockArea();
+        selectTransportationType();
 
-        cy.xpath(stock_movement_loc.batch_qty)
-            .eq(1)
-            .clear()
-            .type("5");
+        CONSUMPTION_ITEMS.forEach(addConsumptionItem);
 
-         // =========================
-        // Item 3
-        // =========================
-        cy.contains("button", "Add").click();
-
-        cy.get(stock_movement_loc.type_itemname)
-            .eq(2)
-            .type("DOLO 650.1 MG LESS-KA11");
-
-        cy.contains("tr", "DOLO 650.1 MG LESS-KA11").click();
-
-        
-
-        cy.xpath(stock_movement_loc.batch_qty)
-            .eq(2)
-            .clear()
-            .type("5");
-
-            // Save
-        cy.xpath('//button[.="Save"]')
-            .should("be.visible")
-            .click();
-          // 1. Trigger action
-//cy.contains("button", "Save").should("be.visible").click();
-
-// 2. Verify green success popup container
-cy.get(".p-toast-message-success")
-  .should("be.visible")
-  .within(() => {
-    // Check Title
-    cy.get(".p-toast-summary").should("have.text", "Success Message");
-    // Check Message Text
-    cy.get(".p-toast-detail").should("have.text", "Item Added Successfully");
-  });
-
+        saveAndVerifySuccess();
     }
 }
 export default Consumption_Stock_Flow;

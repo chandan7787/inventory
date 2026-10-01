@@ -2,109 +2,57 @@
 
 import stock_movement_loc from "../../locators/08.stock_movement";
 
+// Items added to the stock addition, in order. Item 3 has no batch-name step
+// (matches the original flow, where that step was commented out).
+const STOCK_ITEMS = [
+    { name: 'DOLO 650.11 MG-KA11', batchName: 'batch-1', qty: '5', costPrice: '100' },
+    { name: 'DOLO 650.1 MG-KA11', batchName: 'batch-1', qty: '5', costPrice: '100' },
+    { name: 'DOLO 650.1 MG LESS-KA11', qty: '5', costPrice: '100' }
+];
+
+function selectSourceStockArea() {
+    cy.xpath(stock_movement_loc.From_StockArea).should('be.visible').click();
+    cy.get(stock_movement_loc.type_store).should('be.visible').type('Healthcare Store');
+    cy.contains('li', 'Healthcare store').should('be.visible').click();
+}
+
+function selectTransportationType() {
+    cy.xpath(stock_movement_loc.Transportation_Type).should('be.visible').click();
+    cy.contains('li', 'BY PERSON').should('be.visible').click();
+}
+
+function addStockItem({ name, batchName, qty, costPrice }, index) {
+    cy.contains('button', 'Add').should('be.visible').click();
+
+    cy.get(stock_movement_loc.type_itemname).eq(index).should('be.visible').type(name);
+    cy.contains('tr', name).should('be.visible').click();
+
+    if (batchName) {
+        cy.xpath(stock_movement_loc.addstock_batchname).eq(index).should('be.visible').type(batchName);
+    }
+
+    cy.xpath(stock_movement_loc.batch_qty).eq(index).should('be.visible').clear().type(qty);
+    cy.xpath(stock_movement_loc.cost_price).eq(index).should('be.visible').clear().type(costPrice);
+}
+
 const stock_addtion_flow = {
     stock_addtion: function () {
 
-        cy.contains("a", "Stock Movement").click();
-        cy.contains("a", "Stock Addition").click();
-        cy.contains("button", "New ").click();
+        cy.contains('a', 'Stock Movement').should('be.visible').click();
+        cy.contains('a', 'Stock Addition').should('be.visible').click();
+        cy.contains('button', 'New ').should('be.visible').click();
 
-        // Source Stock Area
-        cy.xpath(stock_movement_loc.From_StockArea).click();
+        selectSourceStockArea();
+        selectTransportationType();
 
-        cy.get(stock_movement_loc.type_store)
-            .type("Healthcare Store");
-
-        cy.contains("li", "Healthcare store").click();
-
-        // Transportation Type
-        cy.xpath(stock_movement_loc.Transportation_Type).click();
-        cy.contains("li", "BY PERSON").click();
-
-        // =========================
-        // Item 1
-        // =========================
-        cy.contains("button", "Add").click();
-
-        cy.get(stock_movement_loc.type_itemname)
-            .eq(0)
-            .type("DOLO 650.11 MG-KA11");
-
-        cy.contains("tr", "DOLO 650.11 MG-KA11").click();
-
-        cy.xpath(stock_movement_loc.addstock_batchname)
-            .eq(0)
-            .type("batch-1");
-
-        cy.xpath(stock_movement_loc.batch_qty)
-            .eq(0)
-            .clear()
-            .type("5");
-
-        cy.xpath(stock_movement_loc.cost_price)
-            .eq(0)
-            .clear()
-            .type("100");
-
-
-        // =========================
-        // Item 2
-        // =========================
-        cy.contains("button", "Add").click();
-
-        cy.get(stock_movement_loc.type_itemname)
-            .eq(1)
-            .type("DOLO 650.1 MG-KA11");
-
-        cy.contains("tr", "DOLO 650.1 MG-KA11").click();
-
-        cy.xpath(stock_movement_loc.addstock_batchname)
-            .eq(1)
-            .type("batch-1");
-
-        cy.xpath(stock_movement_loc.batch_qty)
-            .eq(1)
-            .clear()
-            .type("5");
-
-        cy.xpath(stock_movement_loc.cost_price)
-            .eq(1)
-            .clear()
-            .type("100");
-
-
-        // =========================
-        // Item 3
-        // =========================
-        cy.contains("button", "Add").click();
-
-        cy.get(stock_movement_loc.type_itemname)
-            .eq(2)
-            .type("DOLO 650.1 MG LESS-KA11");
-
-        cy.contains("tr", "DOLO 650.1 MG LESS-KA11").click();
-
-       // cy.xpath(stock_movement_loc.addstock_batchname)
-           // .eq(2)
-           // .type("batch-1");
-
-        cy.xpath(stock_movement_loc.batch_qty)
-            .eq(2)
-            .clear()
-            .type("5");
-
-        cy.xpath(stock_movement_loc.cost_price)
-            .eq(2)
-            .clear()
-            .type("100");
+        STOCK_ITEMS.forEach(addStockItem);
 
         // MRP
-        cy.xpath(stock_movement_loc.lessitem_mrp)
-            .type("500");
+        cy.xpath(stock_movement_loc.lessitem_mrp).should('be.visible').type('500');
 
         // Save
         cy.xpath('//button[.="Save"]')
-            .should("be.visible")
+            .should('be.visible')
             .click();
     }
 };

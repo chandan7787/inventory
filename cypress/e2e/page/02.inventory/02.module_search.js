@@ -1,20 +1,13 @@
-import main_login from "../../locators/01.login_locators";
 import purchase_request from "../../locators/02.Purchase_Request";
-import login_page from "./01.login";
 
-
-const module_search= {
+const module_search = {
     module: function () {
-        cy.wait(1000);
-        cy.xpath(purchase_request.Setting_icon).click();
-        cy.wait(1000);
-        cy.xpath(purchase_request.Static).click();
-        cy.wait(1000);
-        cy.get(purchase_request.Close).click();
-        cy.get(purchase_request.Module_Search).click();
-        cy.get(purchase_request.Module_Name_type).type('inventory');
-        //cy.get(main_login.inventory_ico).click();
-        cy.contains("div"," Inventory ").click()
+        cy.xpath(purchase_request.Setting_icon).should('be.visible').click();
+        cy.xpath(purchase_request.Static).should('be.visible').click();
+        cy.get(purchase_request.Close).should('be.visible').click();
+        cy.get(purchase_request.Module_Search).should('be.visible').click();
+        cy.get(purchase_request.Module_Name_type).should('be.visible').type('inventory');
+        cy.contains('div', ' Inventory ').should('be.visible').click();
         cy.wait(1000);
     }
 }

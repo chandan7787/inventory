@@ -1,126 +1,74 @@
-import stock_movement_loc from "../../locators/08.stock_movement"
+import stock_movement_loc from "../../locators/08.stock_movement";
+
+// Items added to the transfer, in order. Batch-selection behaviour differs per row
+// (item 3 has no batch step) exactly as in the original flow.
+const TRANSFER_ITEMS = [
+    { name: 'DOLO 650.11 MG-KA11', batch: { locator: stock_movement_loc.batch_no, index: 0 } },
+    { name: 'DOLO 650.1 MG-KA11', batch: { locator: stock_movement_loc.second_batch_no } },
+    { name: 'DOLO 650.1 MG LESS-KA11' }
+];
+
+function selectStockArea(triggerLocator, searchText, optionText) {
+    cy.xpath(triggerLocator).should('be.visible').click();
+    cy.get(stock_movement_loc.type_store).should('be.visible').type(searchText);
+    cy.contains('li', optionText).should('be.visible').click();
+}
+
+function selectModeOfTransport() {
+    cy.xpath(stock_movement_loc.Mode_of_Transport).should('be.visible').click();
+    cy.contains('li', 'BY PERSON').should('be.visible').click();
+}
+
+function addTransferItem({ name, batch }, index) {
+    cy.contains('button', 'Add').should('be.visible').click();
+
+    cy.get(stock_movement_loc.item_search).eq(index).should('be.visible').type(name);
+    cy.contains('tr', name).should('be.visible').click();
+
+    if (batch) {
+        if (batch.index !== undefined) {
+            cy.xpath(batch.locator).eq(batch.index).should('be.visible').click();
+        } else {
+            cy.xpath(batch.locator).should('be.visible').click();
+        }
+        cy.contains('li', 'batch-1').should('be.visible').click();
+    }
+
+    cy.get(stock_movement_loc.issue_qty).eq(index).should('be.visible').type('5');
+}
+
+function captureNewTransferNumber() {
+    cy.xpath('//div/p-table/div/div[2]/table/tbody/tr[1]/td[1]')
+        .should('be.visible')
+        .invoke('text')
+        .then((newTransferText) => {
+            const newTransferNumber = newTransferText.trim();
+
+            expect(newTransferNumber).to.not.be.empty;
+
+            cy.wrap(newTransferNumber).as('newTransferNumber');
+
+            cy.log(`Copied New Transfer Number: ${newTransferNumber}`);
+        });
+}
 
 const new_transfer_flow = {
     newtransfer: function () {
 
-        cy.contains("a", "Stock Movement").click()
-        cy.contains("a", "New Transfer").click()
-        cy.contains("button", "New ").click()
+        cy.contains('a', 'Stock Movement').should('be.visible').click();
+        cy.contains('a', 'New Transfer').should('be.visible').click();
+        cy.contains('button', 'New ').should('be.visible').click();
 
-        // =========================
-        // FROM STOCK AREA
-        // =========================
+        selectStockArea(stock_movement_loc.From_StockArea, 'Healthcare Store', 'Healthcare store');
+        selectStockArea(stock_movement_loc.To_StockArea, 'healthplus pharmacy', 'HealthPlus Pharmacy');
+        selectModeOfTransport();
 
-        cy.xpath(stock_movement_loc.From_StockArea).click()
+        TRANSFER_ITEMS.forEach(addTransferItem);
 
-        cy.get(stock_movement_loc.type_store)
-            .type("Healthcare Store")
+        cy.contains('button', 'Save').should('be.visible').click();
+        cy.wait(2000);
 
-        cy.contains("li", "Healthcare store").click()
-
-
-        // =========================
-        // TO STOCK AREA
-        // =========================
-
-        cy.xpath(stock_movement_loc.To_StockArea).click()
-
-        cy.get(stock_movement_loc.type_store)
-            .type("healthplus pharmacy")
-
-        cy.contains("li", "HealthPlus Pharmacy").click()
-
-
-        // =========================
-        // MODE OF TRANSPORT
-        // =========================
-
-        cy.xpath(stock_movement_loc.Mode_of_Transport).click()
-
-        cy.contains("li", "BY PERSON").click()
-
-
-        // =========================
-        // FIRST ITEM
-        // =========================
-
-        cy.contains("button", "Add").click()
-
-        cy.get(stock_movement_loc.item_search)
-            .type("DOLO 650.11 MG-KA11")
-
-        cy.contains("tr", "DOLO 650.11 MG-KA11").click()
-
-        cy.xpath(stock_movement_loc.batch_no)
-            .eq(0)
-            .click()
-
-        cy.contains("li", "batch-1").click()
-
-        cy.get(stock_movement_loc.issue_qty)
-            .eq(0)
-            .type("5")
-
-
-        // =========================
-        // SECOND ITEM
-        // =========================
-
-        cy.contains("button", "Add").click()
-
-        cy.get(stock_movement_loc.item_search)
-        .eq(1)
-            .type("DOLO 650.1 MG-KA11")
-
-        cy.contains("tr", "DOLO 650.1 MG-KA11").click()
-
-        cy.xpath(stock_movement_loc.second_batch_no)
-            .click()
-
-        cy.contains("li", "batch-1").click()
-
-        cy.get(stock_movement_loc.issue_qty)
-            .eq(1)
-            .type("5")
-
-
-        // =========================
-        // THIRD ITEM
-        // =========================
-
-        cy.contains("button", "Add").click()
-
-        cy.get(stock_movement_loc.item_search)
-        .eq(2)
-            .type("DOLO 650.1 MG LESS-KA11")
-
-        cy.contains("tr", "DOLO 650.1 MG LESS-KA11").click()
-
-        cy.get(stock_movement_loc.issue_qty)
-            .eq(2)
-            .type("5")
-
-
-        // =========================
-        // SAVE
-        // =========================
-
-        cy.contains("button", "Save").click()
-        cy.wait(2000)
-
-        cy.xpath("//div/p-table/div/div[2]/table/tbody/tr[1]/td[1]")
-    .should("be.visible")
-    .invoke("text")
-    .then((newTransferText) => {
-
-        const newTransferNumber = newTransferText.trim();
-
-        expect(newTransferNumber).to.not.be.empty;
-
-        cy.wrap(newTransferNumber).as("newTransferNumber");
-
-        cy.log(`Copied New Transfer Number: ${newTransferNumber}`);
-    });
+        captureNewTransferNumber();
     }
 }
 

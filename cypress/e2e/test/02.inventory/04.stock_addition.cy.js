@@ -5,10 +5,8 @@ import recivingq_flow from "../../page/02.inventory/04.recivingQ";
 import Rejected_stock_flow from "../../page/02.inventory/05.Rejected_Stock_Transfers";
 import stock_addtion_flow from "../../page/02.inventory/06.stock_addition";
 
-describe("Login Test", () =>
- {
-  it("TEST_CASE_03 - Stock_addition flow", () =>
-     {
+describe("Inventory - Stock Addition", () => {
+    it("TEST_CASE_03 - Stock_addition flow", () => {
         //login _page flow
         login_page.LOgin();
 
@@ -16,6 +14,5 @@ describe("Login Test", () =>
 
         //stock addition flow
         stock_addtion_flow.stock_addtion();
-
-     });
     });
+});
