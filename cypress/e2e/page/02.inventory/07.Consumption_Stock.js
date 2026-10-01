@@ -33,7 +33,7 @@ function addConsumptionItem({ name, batchDropdownIndex }, index) {
 
     if (batchDropdownIndex !== null) {
         cy.xpath(stock_movement_loc.consu_batchno).eq(batchDropdownIndex).click();
-        cy.contains("li", "batch-1");
+        cy.contains("li", "batch-1").click();
     }
 
     cy.xpath(stock_movement_loc.batch_qty).eq(index).clear().type("5");
